@@ -1,0 +1,86 @@
+-- 1. Create Database
+CREATE DATABASE CollegeDB;
+USE CollegeDB;
+
+-- 2. Create Tables
+CREATE TABLE Students (
+    student_id INT AUTO_INCREMENT PRIMARY KEY,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    enrollment_date DATE
+);
+
+CREATE TABLE Courses (
+    course_id INT AUTO_INCREMENT PRIMARY KEY,
+    course_name VARCHAR(100) NOT NULL,
+    credits INT NOT NULL,
+    student_id INT,
+    FOREIGN KEY (student_id) REFERENCES Students(student_id)
+);
+
+-- 3. Insert Sample Data
+INSERT INTO Students (first_name, last_name, email, enrollment_date) VALUES
+('Ajay', 'Singh', 'ajay.singh@gmail.com', '2025-01-10'),
+('Rahul', 'Kumar', 'rahul.kumar@yahoo.com', '2024-09-20'),
+('Sneha', 'Sharma', 'sneha.sharma@gmail.com', '2023-05-14'),
+('Anita', 'Verma', 'anita.verma@hotmail.com', '2022-07-01'),
+('Rohit', 'Yadav', 'rohit.yadav@gmail.com', '2025-02-12');
+
+INSERT INTO Courses (course_name, credits, student_id) VALUES
+('Database Systems', 4, 1),
+('Data Mining', 3, 1),
+('Operating Systems', 4, 2),
+('Computer Networks', 3, 3),
+('Artificial Intelligence', 4, 4),
+('Machine Learning', 3, 5);
+
+-- 4. Queries (Deliverables)
+
+-- Select all students
+SELECT * FROM Students;
+
+-- Select specific columns
+SELECT first_name, email FROM Students;
+
+-- WHERE condition (students enrolled after 2023)
+SELECT * 
+FROM Students
+WHERE enrollment_date > '2023-01-01';
+
+-- WHERE with AND (name Singh enrolled after 2023)
+SELECT * 
+FROM Students
+WHERE last_name = 'Singh' AND enrollment_date > '2023-01-01';
+
+-- WHERE with OR (last name Singh or Kumar)
+SELECT * 
+FROM Students
+WHERE last_name = 'Singh' OR last_name = 'Kumar';
+
+-- LIKE (students with Gmail IDs)
+SELECT * 
+FROM Students
+WHERE email LIKE '%@gmail.com';
+
+-- BETWEEN (students enrolled in 2023)
+SELECT * 
+FROM Students
+WHERE enrollment_date BETWEEN '2023-01-01' AND '2023-12-31';
+
+-- ORDER BY (sort by enrollment_date descending)
+SELECT * 
+FROM Students
+ORDER BY enrollment_date DESC;
+
+-- LIMIT (top 3 newest students)
+SELECT * 
+FROM Students
+ORDER BY enrollment_date DESC
+LIMIT 3;
+
+-- JOIN Example (students with their courses)
+SELECT s.first_name, s.last_name, c.course_name, c.credits
+FROM Students s
+JOIN Courses c ON s.student_id = c.student_id
+ORDER BY s.first_name ASC;
